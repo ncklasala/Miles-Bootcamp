@@ -1,5 +1,7 @@
-DROP TABLE IF EXISTS [Taverns];
-CREATE TABLE [Taverns] (
+
+
+DROP TABLE IF EXISTS Taverns;
+CREATE TABLE Taverns(
 	ID INT,
 	TavernName varchar(250),
     LocationId INT,
@@ -7,9 +9,28 @@ CREATE TABLE [Taverns] (
 );
 INSERT INTO Taverns (ID,TavernName,LocationId,OwnerId) VALUES (1,'Hall',1,1);
 
-DROP TABLE IF EXISTS [Users];
-CREATE TABLE [Users] (
+DROP TABLE IF EXISTS Users;
+CREATE TABLE Users (
 	ID INT,
-	name varchar(250),
+	Name varchar(250),
     roleId INT
+);
+
+DROP TABLE IF EXISTS Roles;
+CREATE TABLE Roles (
+	ID TINYINT,
+	Name varchar(50),
+    Description varchar(Max)
+);
+
+DROP TABLE IF EXISTS Location;
+CREATE TABLE Location (
+	ID TINYINT,
+	Name varchar(250),
+);
+
+DROP TABLE IF EXISTS Rats;
+CREATE TABLE Rats (
+	ID TINYINT,
+	Name varchar(250),
 );
