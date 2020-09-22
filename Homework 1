@@ -6,3 +6,10 @@ CREATE TABLE [Taverns] (
     OwnerId Int
 );
 INSERT INTO Taverns (ID,TavernName,LocationId,OwnerId) VALUES (1,'Hall',1,1);
+
+DROP TABLE IF EXISTS [Users];
+CREATE TABLE [Users] (
+	ID INT,
+	name varchar(250),
+    roleId INT
+);
