@@ -2,7 +2,7 @@
 
 DROP TABLE IF EXISTS Taverns;
 CREATE TABLE Taverns(
-	ID INT,
+	Id INT,
 	TavernName varchar(250),
     LocationId INT,
     OwnerId Int
@@ -11,26 +11,60 @@ INSERT INTO Taverns (ID,TavernName,LocationId,OwnerId) VALUES (1,'Hall',1,1);
 
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
-	ID INT,
+	Id INT,
 	Name varchar(250),
     roleId INT
 );
 
 DROP TABLE IF EXISTS Roles;
 CREATE TABLE Roles (
-	ID TINYINT,
+	Id TINYINT,
 	Name varchar(50),
     Description varchar(Max)
 );
 
 DROP TABLE IF EXISTS Location;
 CREATE TABLE Location (
-	ID TINYINT,
+	Id TINYINT,
 	Name varchar(250),
 );
 
 DROP TABLE IF EXISTS Rats;
 CREATE TABLE Rats (
-	ID TINYINT,
+	Id TINYINT,
 	Name varchar(250),
+);
+
+DROP TABLE IF EXISTS Supplies;
+CREATE TABLE Supplies (
+	Id TINYINT,
+	Name varchar(250),
+);
+
+DROP TABLE IF EXISTS Inventory;
+CREATE TABLE Inventory (
+	Id TINYINT,
+    TavernId INT,
+    SupplyId TINYINT,
+    Updated DATETIME,
+);
+
+DROP TABLE IF EXISTS Sales;
+CREATE TABLE Sales (
+	Id TINYINT,
+    tavernId Int,
+    userId INT,
+    price Int,
+    SupplyId TINYINT,
+    Updated DATETIME,
+);
+
+DROP TABLE IF EXISTS Service;
+CREATE TABLE Service (
+	Id TINYINT,
+    userId INT,
+    tavernId Int,
+    price Int,
+    status varchar(250),
+    Updated DATETIME,
 );
