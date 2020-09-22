@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS [Taverns];
+CREATE TABLE [Taverns] (
+	ID INT,
+	TavernName varchar(250),
+    LocationId INT,
+    OwnerId Int
+);
+INSERT INTO Taverns (ID,TavernName,LocationId,OwnerId) VALUES (1,'Hall',1,1);
