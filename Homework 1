@@ -1,5 +1,7 @@
 
 
+
+
 DROP TABLE IF EXISTS Taverns;
 CREATE TABLE Taverns(
 	Id INT IDENTITY(1, 1),
@@ -7,14 +9,16 @@ CREATE TABLE Taverns(
     LocationId INT,
     OwnerId Int
 );
-INSERT INTO Taverns (TavernName,LocationId,OwnerId) VALUES ('The Hall',1,1),('Moes',1,2),('Petrocks',1,3);
+INSERT INTO Taverns (TavernName,LocationId,OwnerId) VALUES ('The Hall',1,1),('Moes',2,2),('Petrocks',1,3),('Petrocks',2,4),('Rat R US',5,5);
 
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
 	Id INT IDENTITY(1, 1),
 	Name varchar(250),
-    roleId INT
+    RoleId INT
 );
+
+INSERT INTO Users (Name,RoleId) VALUES ('Kathy',1),('Moe',1),('Jim',1),('sam',2),('Rat King',1),('Tim', 2),('Bethany',2);
 
 DROP TABLE IF EXISTS Roles;
 CREATE TABLE Roles (
@@ -22,6 +26,8 @@ CREATE TABLE Roles (
 	Name varchar(50),
     Description varchar(Max)
 );
+
+INSERT INTO Roles (Name,Description) VALUES ('Owner','The owner of the Tavern'),('Bartender','Server the beer'),('Waiter','Servers Tables'),('Dish washer','Washes dishes'),('Customer','Patron of the Tavern');
 
 DROP TABLE IF EXISTS Location;
 CREATE TABLE Location (
