@@ -33,7 +33,7 @@ CREATE TABLE Location (
 	Name varchar(250),
 );
 
-INSERT INTO Location (Name) VALUES ('NJ'),('NY'),('MA'),('DE'),('MD');
+INSERT INTO Location (Name) VALUES ('NJ'),('NY'),('MA'),('DE'),('MD'),('VA');
 
 DROP TABLE IF EXISTS Rats;
 CREATE TABLE Rats (
@@ -41,7 +41,7 @@ CREATE TABLE Rats (
 	Name varchar(250),
 );
 
-INSERT INTO Rats (Name) VALUES ('Micky'),('Pikachu'),('Lou'),('Charlie'),('Minnie');
+INSERT INTO Rats (Name) VALUES ('Micky'),('Pikachu'),('Lou'),('Charlie'),('Minnie'),('Ricky'),('Bubbles');
 
 DROP TABLE IF EXISTS Supplies;
 CREATE TABLE Supplies (
@@ -49,7 +49,7 @@ CREATE TABLE Supplies (
 	Name varchar(250),
 );
 
-INSERT INTO Supplies (Name) VALUES ('Coors'),('Guinness'),('Reds'),('Heineken'),('Blue Moon');
+INSERT INTO Supplies (Name) VALUES ('Coors'),('Guinness'),('Reds'),('Heineken'),('Blue Moon'),('Popcorn');
 
 DROP TABLE IF EXISTS Inventory;
 CREATE TABLE Inventory (
@@ -71,7 +71,7 @@ CREATE TABLE Sales (
     Updated DATETIME,
 );
 
-INSERT INTO Sales (tavernId, userId, price, supplyId) VALUES (1,2, 5, 1),(1,2, 50, 2),(2,3, 5, 3),(3,2, 7, 1),(5,2, 9, 4);
+INSERT INTO Sales (tavernId, userId, price, supplyId) VALUES (1,2, 5, 1),(1,2, 50, 2),(2,3, 5, 3),(3,2, 7, 1),(5,2, 9, 4), (4,4, 18, 4);
 
 DROP TABLE IF EXISTS Service;
 CREATE TABLE Service (
@@ -83,4 +83,4 @@ CREATE TABLE Service (
     Updated DATETIME,
 );
 
-INSERT INTO Service (name, tavernId, price, status) VALUES ('Bar Service',1,NULL, 'Active'),('Bar Service',2,NULL, 'Active'),('Bar Service',3,NULL, 'Active'),('Bar Service',4,NULL, 'Active'),('Bar Service',5,NULL, 'Active');
+INSERT INTO Service (name, tavernId, price, status) VALUES ('Bar Service',1,NULL, 'Active'),('Bar Service',2,NULL, 'Active'),('Bar Service',3,NULL, 'Active'),('Bar Service',4,NULL, 'Active'),('Bar Service',5,NULL, 'Active'),('Pool',1,NULL, 'Not Active'),('Pool',3,NULL, 'Active'),('Darts',2,NULL, 'Active'),('Darts',4,NULL, 'Not Active');
