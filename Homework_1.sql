@@ -10,22 +10,24 @@ DROP TABLE IF EXISTS Sales;
 DROP TABLE IF EXISTS Service;
 DROP TABLE IF EXISTS Guests;
 DROP TABLE IF EXISTS Classes;
-
+DROP TABLE IF EXISTS Statuses;
 
 CREATE TABLE Taverns(
-	Id INT IDENTITY(1, 1) PRIMARY KEY,
+	Id INT IDENTITY(1, 1),
     LocationId INT,
 	TavernName varchar(250),
     OwnerId Int
 );
+ALTER TABLE Taverns ADD PRIMARY KEY (Id);
 
 INSERT INTO Taverns (TavernName,LocationId,OwnerId) VALUES ('The Hall',1,1),('Moes',2,2),('Petrocks',1,3),('Petrocks',2,4),('Rat R US',5,5);
 
 CREATE TABLE Users (
-	Id INT IDENTITY(1, 1) PRIMARY KEY,
+	Id INT IDENTITY(1, 1),
 	Name varchar(250),
     RoleId INT
 );
+ALTER TABLE Users ADD PRIMARY KEY (Id);
 
 INSERT INTO Users (Name,RoleId) VALUES ('Kathy',1),('Moe',1),('Jim',1),('sam',2),('Rat King',1),('Tim', 2),('Bethany',2);
 
@@ -58,20 +60,20 @@ INSERT INTO Rats (Name) VALUES ('Micky'),('Pikachu'),('Lou'),('Charlie'),('Minni
 
 
 CREATE TABLE Supplies (
-	Id TINYINT IDENTITY(1, 1) PRIMARY KEY,
+	Id TINYINT IDENTITY(1, 1),
 	Name varchar(250),
 );
-
+ALTER TABLE Supplies ADD PRIMARY KEY (Id);
 INSERT INTO Supplies (Name) VALUES ('Coors'),('Guinness'),('Reds'),('Heineken'),('Blue Moon'),('Popcorn');
 
 
 CREATE TABLE Inventory (
-	Id TINYINT IDENTITY(1, 1) PRIMARY KEY,
+	Id TINYINT IDENTITY(1, 1),
     tavernId INT,
     supplyId TINYINT,
     Updated DATETIME,
 );
-
+ALTER TABLE Inventory ADD PRIMARY KEY (Id);
 INSERT INTO Inventory (tavernId, supplyId) VALUES (1,1),(1,2),(1,3),(2,1),(2,4);
 
 
@@ -83,7 +85,7 @@ CREATE TABLE Sales (
     supplyId TINYINT,
     Updated DATETIME,
 );
-
+ALTER TABLE Sales ADD FOREIGN KEY (supplyId) REFERENCES Supplies(Id);
 INSERT INTO Sales (tavernId, userId, price, supplyId) VALUES (1,2, 5, 1),(1,2, 50, 2),(2,3, 5, 3),(3,2, 7, 1),(5,2, 9, 4), (4,4, 18, 4);
 
 
@@ -106,10 +108,11 @@ CREATE TABLE Guests (
     notes varchar(MAX),
     birthday varchar(50),
     cakeday varchar(50),
-    status varchar(250),
+    statusId INT,
 );
 
-INSERT INTO Guests (name,birthday,cakeday, notes, status) VALUES ('Nick','5/26','1/1','Left','Happy');
+
+
 
 CREATE TABLE Classes(
   Id INT IDENTITY(1, 1) PRIMARY KEY,
@@ -125,7 +128,18 @@ CREATE TABLE GuestsClasses (
     classId INT,
     Lvl INT,
 );
+CREATE TABLE Statuses (
+	Id INT IDENTITY(1, 1) PRIMARY KEY,
+    name varchar(250),
+);
+
+/* this statement will fail prior to establishing the foreign key relations */
+/* Select Guests.name, Classes.name, GuestsClasses.lvl FROM Guests, Classes, GuestsClasses WHERE GuestsClasses.guestId = Guests.Id AND GuestsClasses.classId = Classes.Id */
+
 ALTER TABLE GuestsClasses ADD FOREIGN KEY (guestId) REFERENCES Guests(Id);
 ALTER TABLE GuestsClasses ADD FOREIGN KEY (classId) REFERENCES Classes(Id);
+ALTER TABLE Guests ADD FOREIGN KEY (statusId) REFERENCES Statuses(Id);
 
+INSERT INTO Statuses (name) VALUES ('Healthy');
+INSERT INTO Guests (name,birthday,cakeday, notes, statusId) VALUES ('Nick','5/26','1/1','Left',1);
 INSERT INTO GuestsClasses (guestId, classId, lvl) VALUES (1,2,10);
