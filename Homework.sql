@@ -27,7 +27,7 @@ CREATE TABLE Taverns(
 );
 ALTER TABLE Taverns ADD PRIMARY KEY (Id);
 
-INSERT INTO Taverns (TavernName,LocationId,OwnerId) VALUES ('The Hall',1,1),('Moes',2,2),('Petrocks',1,3),('Petrocks',2,4),('Rat R US',5,5);
+INSERT INTO Taverns (TavernName,LocationId,OwnerId) VALUES ('The Hall',1,1),('Moes',2,2),('Petrocks',1,3),('Petrocks',2,4),('Rat Land',5,5);
 
 CREATE TABLE Users (
 	Id INT IDENTITY(1, 1),
