@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS Location;
+DROP TABLE IF EXISTS Locations;
 DROP TABLE IF EXISTS Taverns;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Roles;
@@ -6,17 +6,18 @@ DROP TABLE IF EXISTS Rats;
 DROP TABLE IF EXISTS Supplies;
 DROP TABLE IF EXISTS Inventory;
 DROP TABLE IF EXISTS Sales;
-DROP TABLE IF EXISTS Service;
+DROP TABLE IF EXISTS Services;
 DROP TABLE IF EXISTS Guests;
 DROP TABLE IF EXISTS Classes;
 DROP TABLE IF EXISTS Statuses;
+DROP Table IF EXISTS GuestsClasses;
 
-CREATE TABLE Location (
+CREATE TABLE Locations (
 	Id INT IDENTITY(1, 1),
 	Name varchar(250),
 );
-ALTER TABLE Location ADD PRIMARY KEY (Id);
-INSERT INTO Location (Name) VALUES ('NJ'),('NY'),('MA'),('DE'),('MD'),('VA');
+ALTER TABLE Locations ADD PRIMARY KEY (Id);
+INSERT INTO Locations (Name) VALUES ('NJ'),('NY'),('MA'),('DE'),('MD'),('VA');
 
 CREATE TABLE Taverns(
 	Id INT IDENTITY(1, 1),
@@ -79,7 +80,7 @@ ALTER TABLE Sales ADD PRIMARY KEY (Id);
 ALTER TABLE Sales ADD FOREIGN KEY (supplyId) REFERENCES Supplies(Id);
 INSERT INTO Sales (tavernId, userId, price, supplyId) VALUES (1,2, 5, 1),(1,2, 50, 2),(2,3, 5, 3),(3,2, 7, 1),(5,2, 9, 4), (4,4, 18, 4);
 
-CREATE TABLE Service (
+CREATE TABLE Services (
 	Id TINYINT IDENTITY(1, 1),
     name varchar(250),
     tavernId Int,
@@ -87,8 +88,8 @@ CREATE TABLE Service (
     status varchar(250),
     Updated DATETIME,
 );
-ALTER TABLE Service ADD PRIMARY KEY (Id);
-INSERT INTO Service (name, tavernId, price, status) VALUES ('Bar Service',1,NULL, 'Active'),('Bar Service',2,NULL, 'Active'),('Bar Service',3,NULL, 'Active'),('Bar Service',4,NULL, 'Active'),('Bar Service',5,NULL, 'Active'),('Pool',1,NULL, 'Not Active'),('Pool',3,NULL, 'Active'),('Darts',2,NULL, 'Active'),('Darts',4,NULL, 'Not Active');
+ALTER TABLE Services ADD PRIMARY KEY (Id);
+INSERT INTO Services (name, tavernId, price, status) VALUES ('Bar Service',1,NULL, 'Active'),('Bar Service',2,NULL, 'Active'),('Bar Service',3,NULL, 'Active'),('Bar Service',4,NULL, 'Active'),('Bar Service',5,NULL, 'Active'),('Pool',1,NULL, 'Not Active'),('Pool',3,NULL, 'Active'),('Darts',2,NULL, 'Active'),('Darts',4,NULL, 'Not Active');
 ALTER TABLE Taverns ADD FOREIGN KEY (LocationId) REFERENCES Location(Id);
 
 CREATE TABLE Guests (
