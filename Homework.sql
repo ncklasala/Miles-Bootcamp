@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS Locations;
+DROP TABLE IF EXISTS Location;
 DROP TABLE IF EXISTS Taverns;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Roles;
@@ -6,18 +6,18 @@ DROP TABLE IF EXISTS Rats;
 DROP TABLE IF EXISTS Supplies;
 DROP TABLE IF EXISTS Inventory;
 DROP TABLE IF EXISTS Sales;
-DROP TABLE IF EXISTS Services;
+DROP TABLE IF EXISTS Service;
 DROP TABLE IF EXISTS Guests;
 DROP TABLE IF EXISTS Classes;
 DROP TABLE IF EXISTS Statuses;
-DROP Table IF EXISTS GuestsClasses;
-
-CREATE TABLE Locations (
+DROP TABLE IF EXISTS Rooms;
+DROP TABLE IF EXISTS RoomStays;
+CREATE TABLE Location (
 	Id INT IDENTITY(1, 1),
 	Name varchar(250),
 );
-ALTER TABLE Locations ADD PRIMARY KEY (Id);
-INSERT INTO Locations (Name) VALUES ('NJ'),('NY'),('MA'),('DE'),('MD'),('VA');
+ALTER TABLE Location ADD PRIMARY KEY (Id);
+INSERT INTO Location (Name) VALUES ('NJ'),('NY'),('MA'),('DE'),('MD'),('VA');
 
 CREATE TABLE Taverns(
 	Id INT IDENTITY(1, 1),
@@ -27,7 +27,7 @@ CREATE TABLE Taverns(
 );
 ALTER TABLE Taverns ADD PRIMARY KEY (Id);
 
-INSERT INTO Taverns (TavernName,LocationId,OwnerId) VALUES ('The Hall',1,1),('Moes',2,2),('Petrocks',1,3),('Petrocks',2,4),('Rat Land',5,5);
+INSERT INTO Taverns (TavernName,LocationId,OwnerId) VALUES ('The Hall',1,1),('Moes',2,2),('Petrocks',1,3),('Petrocks',2,4),('Rat R US',5,5);
 
 CREATE TABLE Users (
 	Id INT IDENTITY(1, 1),
@@ -80,7 +80,7 @@ ALTER TABLE Sales ADD PRIMARY KEY (Id);
 ALTER TABLE Sales ADD FOREIGN KEY (supplyId) REFERENCES Supplies(Id);
 INSERT INTO Sales (tavernId, userId, price, supplyId) VALUES (1,2, 5, 1),(1,2, 50, 2),(2,3, 5, 3),(3,2, 7, 1),(5,2, 9, 4), (4,4, 18, 4);
 
-CREATE TABLE Services (
+CREATE TABLE Service (
 	Id TINYINT IDENTITY(1, 1),
     name varchar(250),
     tavernId Int,
@@ -88,8 +88,8 @@ CREATE TABLE Services (
     status varchar(250),
     Updated DATETIME,
 );
-ALTER TABLE Services ADD PRIMARY KEY (Id);
-INSERT INTO Services (name, tavernId, price, status) VALUES ('Bar Service',1,NULL, 'Active'),('Bar Service',2,NULL, 'Active'),('Bar Service',3,NULL, 'Active'),('Bar Service',4,NULL, 'Active'),('Bar Service',5,NULL, 'Active'),('Pool',1,NULL, 'Not Active'),('Pool',3,NULL, 'Active'),('Darts',2,NULL, 'Active'),('Darts',4,NULL, 'Not Active');
+ALTER TABLE Service ADD PRIMARY KEY (Id);
+INSERT INTO Service (name, tavernId, price, status) VALUES ('Bar Service',1,NULL, 'Active'),('Bar Service',2,NULL, 'Active'),('Bar Service',3,NULL, 'Active'),('Bar Service',4,NULL, 'Active'),('Bar Service',5,NULL, 'Active'),('Pool',1,NULL, 'Not Active'),('Pool',3,NULL, 'Active'),('Darts',2,NULL, 'Active'),('Darts',4,NULL, 'Not Active');
 ALTER TABLE Taverns ADD FOREIGN KEY (LocationId) REFERENCES Location(Id);
 
 CREATE TABLE Guests (
@@ -121,6 +121,7 @@ CREATE TABLE Statuses (
     name varchar(250),
 );
 ALTER TABLE Statuses ADD PRIMARY KEY (Id);
+
 /* this statement will fail prior to establishing the foreign key relations */
 /* Select Guests.name, Classes.name, GuestsClasses.lvl FROM Guests, Classes, GuestsClasses WHERE GuestsClasses.guestId = Guests.Id AND GuestsClasses.classId = Classes.Id */
 
@@ -133,3 +134,21 @@ ALTER TABLE Guests ADD FOREIGN KEY (statusId) REFERENCES Statuses(Id);
 INSERT INTO Statuses (name) VALUES ('Healthy');
 INSERT INTO Guests (name,birthday,cakeday, notes, statusId) VALUES ('Nick','5/26','1/1','Left',1);
 INSERT INTO GuestsClasses (guestId, classId, lvl) VALUES (1,2,10);
+
+/* Homework 3 */
+CREATE TABLE Rooms (
+	Id INT IDENTITY(1, 1),
+    tavernId INT,
+);
+ALTER TABLE Rooms ADD PRIMARY KEY (Id);
+ALTER TABLE Rooms ADD FOREIGN KEY (tavernId) REFERENCES Taverns(Id);
+
+CREATE TABLE RoomStays (
+	Id INT IDENTITY(1, 1),
+    roomId INT,
+    guestId INT,
+    saleId INT,
+    stay DATETIME,
+    rate INT,
+);
+ALTER TABLE RoomStays ADD PRIMARY KEY (Id);
