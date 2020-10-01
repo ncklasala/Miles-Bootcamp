@@ -192,3 +192,8 @@ from (
     else 'Max' end as range
   from GuestsClasses) G
 group by G.range
+/*9*/
+SELECT CONCAT('INSERT INTO ',TABLE_NAME,' (Name) VALUES') FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_NAME = 'Guests'
+UNION ALL
+SELECT CONCAT('(''',name,'''),') FROM Statuses;
