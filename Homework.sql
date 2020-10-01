@@ -176,24 +176,21 @@ SELECT TOP 10 rate FROM Rooms;
 /* 7 */
 SELECT TABLE_NAME, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS;
 /* 8 */
-select G.range as [score range], count(*) as [number of occurences]
-from (
-  select case  
-    when lvl between 1 and 10 then ' 1-10'
-    when lvl between 11 and 20 then '11-20'
-	when lvl between 21 and 30 then '21-30'
-	when lvl between 31 and 40 then '31-40'
-	when lvl between 41 and 50 then '41-50'
-	when lvl between 51 and 60 then '51-60'
-	when lvl between 61 and 70 then '61-70'
-	when lvl between 71 and 80 then '71-80'
-	when lvl between 81 and 90 then '81-90'
-	when lvl between 91 and 98 then '91-99'
-    else 'Max' end as range
-  from GuestsClasses) G
-group by G.range
+SELECT G.RANGE AS [score range], COUNT(*) AS [number of occurences]
+FROM (
+  SELECT CASE  
+    WHEN lvl between 1 and 10 THEN ' 1-10'
+    WHEN lvl between 11 and 20 THEN '11-20'
+	WHEN lvl between 21 and 30 THEN '21-30'
+	WHEN lvl between 31 and 40 THEN '31-40'
+	WHEN lvl between 41 and 50 THEN '41-50'
+	WHEN lvl between 51 and 60 THEN '51-60'
+	WHEN lvl between 61 and 70 THEN '61-70'
+	WHEN lvl between 71 and 80 THEN '71-80'
+	WHEN lvl between 81 and 90 THEN '81-90'
+	WHEN lvl between 91 and 98 THEN '91-99'
+    ELSE 'Max' END AS RANGE
+  FROM GuestsClasses) G
+GROUP BY G.RANGE
 /*9*/
-SELECT CONCAT('INSERT INTO ',TABLE_NAME,' (Name) VALUES') FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_NAME = 'Guests'
-UNION ALL
-SELECT CONCAT('(''',name,'''),') FROM Statuses;
+SELECT CONCAT('INSERT INTO ',TABLE_NAME,' (Name) VALUES') FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Guests' UNION ALL SELECT CONCAT('(''',name,'''),') FROM Statuses;
