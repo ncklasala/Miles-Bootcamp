@@ -1,17 +1,21 @@
-DROP TABLE IF EXISTS Locations;
+Use TavernsDB;
 DROP TABLE IF EXISTS Taverns;
-DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Locations;
+DROP TABLE IF EXISTS Rooms;
 DROP TABLE IF EXISTS Roles;
+DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Rats;
+DROP TABLE IF EXISTS Sales;
 DROP TABLE IF EXISTS Supplies;
 DROP TABLE IF EXISTS Inventory;
-DROP TABLE IF EXISTS Sales;
+DROP TABLE IF EXISTS ServicesSales;
 DROP TABLE IF EXISTS Services;
-DROP TABLE IF EXISTS Guests;
+DROP TABLE IF EXISTS GuestsClasses;
 DROP TABLE IF EXISTS Classes;
-DROP TABLE IF EXISTS Statuses;
-DROP TABLE IF EXISTS Rooms;
+DROP TABLE IF EXISTS Guests;
 DROP TABLE IF EXISTS RoomStays;
+DROP TABLE IF EXISTS Statuses;
+
 
 CREATE TABLE Locations (
 	Id INT IDENTITY(1, 1),
@@ -39,7 +43,7 @@ ALTER TABLE Users ADD PRIMARY KEY (Id);
 INSERT INTO Users (Name,RoleId) VALUES ('Kathy',1),('Moe',1),('Jim',1),('sam',2),('Rat King',1),('Tim', 2),('Bethany',2);
 
 CREATE TABLE Roles (
-	Id TINYINT IDENTITY(1, 1),
+	Id INT IDENTITY(1, 1),
 	Name varchar(50),
     Description varchar(Max)
 );
@@ -54,16 +58,16 @@ INSERT INTO Rats (Name) VALUES ('Micky'),('Pikachu'),('Lou'),('Charlie'),('Minni
 DROP TABLE Rats; 
 
 CREATE TABLE Supplies (
-	Id TINYINT IDENTITY(1, 1),
+	Id INT IDENTITY(1, 1),
 	Name varchar(250),
 );
 ALTER TABLE Supplies ADD PRIMARY KEY (Id);
 INSERT INTO Supplies (Name) VALUES ('Coors'),('Guinness'),('Reds'),('Heineken'),('Blue Moon'),('Popcorn');
 
 CREATE TABLE Inventory (
-	Id TINYINT IDENTITY(1, 1),
+	Id INT IDENTITY(1, 1),
     tavernId INT,
-    supplyId TINYINT,
+    supplyId INT,
     Updated DATETIME,
 );
 ALTER TABLE Inventory ADD PRIMARY KEY (Id);
@@ -74,7 +78,7 @@ CREATE TABLE Sales (
     tavernId Int,
     userId INT,
     price Int,
-    supplyId TINYINT,
+    supplyId INT,
     Updated DATETIME,
 );
 ALTER TABLE Sales ADD PRIMARY KEY (Id);
@@ -82,7 +86,7 @@ ALTER TABLE Sales ADD FOREIGN KEY (supplyId) REFERENCES Supplies(Id);
 INSERT INTO Sales (tavernId, userId, price, supplyId) VALUES (1,2, 5, 1),(1,2, 50, 2),(2,3, 5, 3),(3,2, 7, 1),(5,2, 9, 4), (4,4, 18, 4);
 
 CREATE TABLE Services (
-	Id TINYINT IDENTITY(1, 1),
+	Id INT IDENTITY(1, 1),
     name varchar(250),
     tavernId Int,
     price Int,
@@ -136,8 +140,9 @@ INSERT INTO Statuses (name) VALUES ('Healthy');
 INSERT INTO Guests (name,birthday,cakeday, notes, statusId) VALUES ('Nick','5/26/1996','1/1/2020','Left',1);
 INSERT INTO Guests (name,birthday,cakeday, notes, statusId) VALUES ('Matt','5/26/1996','1/1/2020','Right',1);
 INSERT INTO Guests (name,birthday,cakeday, notes, statusId) VALUES ('Nick','5/26/1996','1/1/2020','Here',1);
+INSERT INTO Guests (name,birthday,cakeday, notes, statusId) VALUES ('Ryan','6/15/1996','1/1/2020','Here',1),('Hannah','10/5/1996','1/1/2020','Here',1);
 INSERT INTO GuestsClasses (guestId, classId, lvl) VALUES (1,2,10);
-
+INSERT INTO GuestsClasses (guestId, classId, lvl) VALUES (2,3,20);
 /* Homework 3 */
 CREATE TABLE Rooms (
 	Id INT IDENTITY(1, 1),
@@ -156,13 +161,15 @@ CREATE TABLE RoomStays (
 	Id INT IDENTITY(1, 1),
     roomId INT,
     guestId INT,
-    saleId TINYINT,
+    saleId INT,
     stay DATETIME,
 );
 ALTER TABLE RoomStays ADD PRIMARY KEY (Id);
 ALTER TABLE RoomStays ADD FOREIGN KEY (roomId) REFERENCES Rooms(Id);
 ALTER TABLE RoomStays ADD FOREIGN KEY (guestId) REFERENCES Guests(Id);
 ALTER TABLE RoomStays ADD FOREIGN KEY (saleId) REFERENCES Sales(Id);
+
+INSERT INTO RoomStays (roomId, guestId, saleId, stay) VALUES (1,1,1, 5/26/2020);
 /* 2 */
 SELECT * FROM Guests where birthday > 1/1/2000 ;
 /* 3 */
@@ -194,3 +201,183 @@ FROM (
 GROUP BY G.RANGE
 /*9*/
 SELECT CONCAT('INSERT INTO ',TABLE_NAME,' (Name) VALUES') FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Guests' UNION ALL SELECT CONCAT('(''',name,'''),') FROM Statuses;
+
+/* Lab 4 */
+SELECT Guests.*, Classes.name, GuestsClasses.lvl FROM Guests 
+FULL JOIN GuestsClasses 
+ON Guests.Id = GuestsClasses.guestId 
+FULL JOIN Classes 
+On Classes.Id = GuestsClasses.classId;
+
+
+SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+SELECT * FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS
+
+SELECT INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_NAME, 
+INFORMATION_SCHEMA.TABLE_CONSTRAINTS.TABLE_NAME, 
+INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_TYPE,
+INFORMATION_SCHEMA.KEY_COLUMN_USAGE.COLUMN_NAME
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+ON INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_NAME = INFORMATION_SCHEMA.KEY_COLUMN_USAGE.CONSTRAINT_NAME 
+INNER JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS 
+ON INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS.CONSTRAINT_NAME = INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_NAME;
+
+SELECT INFORMATION_SCHEMA.KEY_COLUMN_USAGE.CONSTRAINT_NAME, 
+INFORMATION_SCHEMA.KEY_COLUMN_USAGE.TABLE_NAME, 
+INFORMATION_SCHEMA.KEY_COLUMN_USAGE.COLUMN_NAME
+FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE;
+
+SELECT INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS.CONSTRAINT_NAME
+FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS;
+
+/*Lab 5 ? */
+/* ALTER TABLE Rooms ADD PRIMARY KEY (Id);*/
+/* ALTER TABLE GuestsClasses ADD FOREIGN KEY (guestId) REFERENCES Guests(Id);*/
+SELECT 
+CONCAT('CREATE TABLE ',TABLE_NAME, ' (') as queryPiece 
+FROM INFORMATION_SCHEMA.TABLES
+ WHERE TABLE_NAME = 'Taverns'
+UNION ALL
+SELECT CONCAT(cols.COLUMN_NAME, ' ', cols.DATA_TYPE, 
+(CASE WHEN CHARACTER_MAXIMUM_LENGTH IS NOT NULL 
+Then CONCAT('(', CAST(CHARACTER_MAXIMUM_LENGTH as varchar(100)), 
+')') Else '' END), ',') as queryPiece FROM 
+INFORMATION_SCHEMA.COLUMNS as cols WHERE
+TABLE_NAME = 'Taverns'
+UNION ALL
+SELECT ')'
+UNION ALL
+SELECT 
+CONCAT('ALTER TABLE ',INFORMATION_SCHEMA.TABLE_CONSTRAINTS.TABLE_NAME, ' ADD ', 'PRIMARY KEY',' (', INFORMATION_SCHEMA.KEY_COLUMN_USAGE.COLUMN_NAME, ')')
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+ON INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_NAME = INFORMATION_SCHEMA.KEY_COLUMN_USAGE.CONSTRAINT_NAME 
+WHERE INFORMATION_SCHEMA.TABLE_CONSTRAINTS.TABLE_NAME = 'Taverns' AND INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_TYPE = 'PRIMARY KEY'
+UNION ALL
+SELECT 
+CONCAT('ALTER TABLE ',INFORMATION_SCHEMA.TABLE_CONSTRAINTS.TABLE_NAME, ' ADD',' FOREIGN KEY',' (', INFORMATION_SCHEMA.KEY_COLUMN_USAGE.COLUMN_NAME, ') REFERENCES')
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+ON INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_NAME = INFORMATION_SCHEMA.KEY_COLUMN_USAGE.CONSTRAINT_NAME 
+WHERE INFORMATION_SCHEMA.TABLE_CONSTRAINTS.TABLE_NAME = 'Taverns' AND INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_TYPE = 'FOREIGN KEY';
+
+/* Homework 4 */
+/* 1 */
+/*Insert for testing purpose*/
+INSERT INTO Roles (Name,Description) VALUES ('Admin','System Admin');
+INSERT INTO Users (Name,RoleId) VALUES ('Don',6);
+
+SELECT * FROM Users 
+INNER JOIN Roles ON (Users.roleId = Roles.Id) 
+WHERE Roles.Name = 'Admin';
+
+/* 2 */
+/*Insert for testing purpose*/
+INSERT INTO Taverns (TavernName,LocationId,OwnerId) VALUES ('Kona',1,8);
+
+SELECT Users.name, Taverns.* FROM Users 
+INNER JOIN Roles ON (Users.RoleId = Roles.Id)
+INNer JOIN Taverns ON (Taverns.ownerId = Users.Id)
+WHERE Roles.name = 'Admin';
+
+/* 3 */
+SELECT Guests.name, Classes.name, GuestsClasses.lvl FROM Guests 
+JOIN GuestsClasses 
+ON Guests.Id = GuestsClasses.guestId 
+JOIN Classes 
+On Classes.Id = GuestsClasses.classId
+ORDER BY Guests.name ASC;
+
+/* 4 */
+CREATE TABLE ServicesSales (
+	Id INT IDENTITY(1, 1) Primary Key,
+    serviceId INT FOREIGN KEY REFERENCES Services(Id),
+	guestId INT FOREIGN KEY REFERENCES Guests(Id),
+);
+/*Insert for testing purpose*/
+INSERT INTO ServicesSales (serviceId,guestId) VALUES (1,4);
+
+SELECT TOP 10 ServicesSales.*, Services.name, Services.price, Guests.name
+FROM ServicesSales
+JOIN Services 
+ON (ServicesSales.serviceId = Services.Id)
+JOIN Guests 
+ON (ServicesSales.guestId = Guests.Id);
+
+/* 5 */
+SELECT Guests.name, COUNT(Classes.name) AS 'Class Count' FROM Classes
+JOIN GuestsClasses 
+ON (GuestsClasses.classId = Classes.Id)
+JOIN Guests 
+ON (GuestsClasses.guestId = Guests.Id)
+GROUP BY Guests.name
+HAVING COUNT(Classes.name) > 1;
+
+/* 6 */
+SELECT Guests.name, COUNT(Classes.name) AS 'Class Count' FROM Classes
+JOIN GuestsClasses 
+ON (GuestsClasses.classId = Classes.Id)
+JOIN Guests 
+ON (GuestsClasses.guestId = Guests.Id)
+Where GuestsClasses.lvl > 5
+GROUP BY Guests.name
+HAVING COUNT(Classes.name) > 1;
+
+/*7 */
+/*Insert for testing purpose*/
+INSERT INTO GuestsClasses (guestId, classId, lvl) VALUES (2,4,35),(1,2,20);
+
+SELECT Guests.Name, MAX(GuestsClasses.lvl) AS 'Max lvl' FROM Guests
+JOIN GuestsClasses 
+ON (GuestsClasses.guestId = Guests.Id)
+JOIN Classes ON (GuestsClasses.classId = Classes.Id)
+GROUP BY Guests.Name;
+
+/*8 */
+INSERT INTO RoomStays (roomId, guestId, saleId, stay) VALUES (1,2,3, 01/01/2010);
+
+SELECT Guests.name, RoomStays.stay FROM Guests
+JOIN RoomStays ON (Guests.Id = RoomStays.guestId)
+WHERE RoomStays.stay BETWEEN 01/01/1999 AND 01/01/2020;
+
+/* 9 */
+/* Built off sample provided rather than my attempt*/
+SELECT 
+CONCAT('CREATE TABLE ',TABLE_NAME, ' (') as queryPiece 
+FROM INFORMATION_SCHEMA.TABLES
+ WHERE TABLE_NAME = 'Taverns'
+UNION ALL
+SELECT CONCAT(cols.COLUMN_NAME, ' ', cols.DATA_TYPE, 
+(
+	CASE WHEN CHARACTER_MAXIMUM_LENGTH IS NOT NULL 
+	Then CONCAT
+		('(', CAST(CHARACTER_MAXIMUM_LENGTH as varchar(100)), ')') 
+	Else '' 
+	END)
+, 
+
+	CASE WHEN refConst.CONSTRAINT_NAME IS NOT NULL
+	Then 
+		(CONCAT(' FOREIGN KEY REFERENCES ', constKeys.TABLE_NAME, '(', constKeys.COLUMN_NAME, ')')) 
+	Else '' 
+	END,
+
+	CASE WHEN cols.COLUMN_NAME = 'Id'
+	THEN (' IDENTITY (1,1) Primary Key')
+	ELSE ''
+	END
+,
+',') as queryPiece FROM 
+INFORMATION_SCHEMA.COLUMNS as cols
+LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE as keys ON 
+(keys.TABLE_NAME = cols.TABLE_NAME and keys.COLUMN_NAME = cols.COLUMN_NAME)
+LEFT JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS as refConst ON 
+(refConst.CONSTRAINT_NAME = keys.CONSTRAINT_NAME)
+LEFT JOIN 
+(SELECT DISTINCT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME 
+FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE) as constKeys 
+ON (constKeys.CONSTRAINT_NAME = refConst.UNIQUE_CONSTRAINT_NAME)
+ WHERE cols.TABLE_NAME = 'Taverns'
+UNION ALL
+SELECT ')'; 
