@@ -381,3 +381,90 @@ ON (constKeys.CONSTRAINT_NAME = refConst.UNIQUE_CONSTRAINT_NAME)
  WHERE cols.TABLE_NAME = 'Taverns'
 UNION ALL
 SELECT ')'; 
+
+/*Homework 5*/
+/* 1 */
+
+SELECT Users.name, Roles.name FROM Users JOIN Roles 
+ON (Users.roleId = Roles.Id);
+
+/*2*/
+SELECT Classes.Id, Classes.name AS 'Class Name', COUNT(Guests.name) AS 'Guests #' FROM Classes
+LEFT JOIN GuestsClasses 
+ON (Classes.Id = GuestsClasses.classId)
+LEFT JOIN Guests 
+ON (guests.Id = GuestsClasses.guestId)
+GROUP BY Classes.Id, Classes.name;
+
+/*3*/
+SELECT Guests.name AS 'Guest', Classes.name AS 'Class', GuestsClasses.lvl, (
+	CASE 
+	WHEN lvl < 5 
+	THEN 'Beginner'
+	WHEN lvl BETWEEN 5 AND 9
+	THEN 'Intermediate'
+	WHEN lvl >= 10
+	THEN 'Expert'
+	ELSE 'No Class'
+	END) AS 'Label'
+FROM Guests
+JOIN GuestsClasses ON (Guests.Id = GuestsClasses.guestId)
+JOIN Classes ON (Classes.Id = GuestsClasses.classId)
+ORDER BY Guests.name ASC;
+
+/*4*/
+IF OBJECT_ID (N'dbo.getLevels', N'FN') IS NOT NULL  
+    DROP FUNCTION dbo.getLevels;  
+GO  
+CREATE FUNCTION dbo.getLevels(@lvl int)
+RETURNS varchar(20)
+AS
+BEGIN
+	DECLARE @ret varchar(20)
+	SELECT @ret = (CASE 
+	WHEN @lvl < 5
+	THEN 'Beginner'
+	WHEN @lvl BETWEEN 5 AND 9
+	THEN 'Intermediate'
+	WHEN @lvl >= 10
+	THEN 'Expert'
+	ELSE 'No Class'
+	END)
+	RETURN @ret;
+END;
+
+/*5*/
+IF OBJECT_ID (N'dbo.getLevels', N'FN') IS NOT NULL  
+    DROP FUNCTION dbo.getRooms;  
+GO  
+CREATE FUNCTION dbo.getRooms(@day DATETIME)
+RETURNS TABLE  
+AS                
+RETURN   
+
+	SELECT DISTINCT Rooms.Id AS 'Room #', Rooms.rate, Taverns.TavernName FROM Rooms
+	LEFT JOIN Taverns ON (Taverns.Id = Rooms.tavernId)
+	LEFT JOIN RoomStays ON (Rooms.Id = RoomStays.roomId)
+	WHERE RoomStays.stay != @day
+;
+/*6*/
+
+IF OBJECT_ID (N'dbo.getRoomsPrice', N'FN') IS NOT NULL  
+    DROP FUNCTION dbo.getRoomsPrice;  
+GO  
+CREATE FUNCTION dbo.getRoomsPrice(@min int, @max int)
+RETURNS TABLE  
+AS                
+RETURN   
+
+	SELECT DISTINCT Rooms.Id AS 'Room #', Rooms.rate, Taverns.TavernName, Rooms.tavernId FROM Rooms
+	LEFT JOIN Taverns ON (Taverns.Id = Rooms.tavernId)
+	WHERE Rooms.rate BETWEEN @min AND @max
+;
+
+/*7*/
+SELECT 'INSERT INTO Rooms (tavernId, statusId, rate)'
+UNION ALL
+SELECT CONCAT('VALUES (3,2,', (rate)-1 ,');'
+) FROM dbo.getRoomsPrice(1, 999) AS rooms
+WHERE rate = (SELECT Min(rate) FROM dbo.getRoomsPrice(1, 999))
