@@ -5,7 +5,14 @@ console.log("Type playGame() to get started");
 function playGame(){
   console.log("Select how many rounds you would like to play");
   let rounds = prompt("Enter number of rounds");
-  gamelogic(rounds);
+  if(rounds == parseInt(rounds)){
+    gamelogic(rounds);
+  }
+  else{
+    console.log('Thats not a number')
+   playGame();
+  }
+  
 }
 
 function randomNumber(min, max) {
@@ -76,6 +83,8 @@ function gamelogic(rounds){
     }
     console.log(`Current score is: ${wins} wins, ${loses} loses, ${ties} ties.`);
   }
+  console.log(`Final score is: ${wins} wins, ${loses} loses, ${ties} ties.`);
+
   console.log('type playGame() to play again')
 }
 
