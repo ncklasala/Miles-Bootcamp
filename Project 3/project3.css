@@ -1,7 +1,29 @@
+.container {
+  height: 50rem;
+  position: relative;
+}
 .calculator {
   margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   text-align: center;
 }
+.numberBoxes span {
+  display: inline-block;
+  margin: 1rem;
+}
+.numInput {
+  display: block;
+}
+input[type="radio"]:checked + label {
+  font-weight: bold;
+}
 .calculateButton {
-  background-color: lightblue;
+  background-color: rgb(23, 187, 241);
+}
+.clearButton {
+  background-color: rgb(226, 218, 218);
 }
