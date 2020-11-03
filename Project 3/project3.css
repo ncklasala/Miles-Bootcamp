@@ -11,6 +11,9 @@
   transform: translate(-50%, -50%);
   text-align: center;
 }
+.title {
+  margin: 0;
+}
 .numberBoxes span {
   display: inline-block;
   margin: 1rem;
@@ -21,9 +24,22 @@
 input[type="radio"]:checked + label {
   font-weight: bold;
 }
+.buttons {
+  padding-top: 0.75rem;
+}
 .calculateButton {
+  margin-right: 1rem;
   background-color: rgb(23, 187, 241);
+  font-size: 16px;
+  padding: 0.25rem;
 }
 .clearButton {
+  margin-left: 1rem;
   background-color: rgb(226, 218, 218);
+  font-size: 16px;
+  padding: 0.25rem;
+}
+#result {
+  padding: 0.75rem;
+  font-size: 26px;
 }
