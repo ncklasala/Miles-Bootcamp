@@ -1,6 +1,13 @@
 body {
   margin: 0 auto;
 }
+/* This commented out styling is only needed for alternate search class styling*/
+
+/* .project1 {
+  height: 50rem;
+  position: relative;
+} */
+
 .googleLogo {
   margin: 0 auto;
   margin-top: 89px;
@@ -15,6 +22,19 @@ body {
   width: 60rem;
   position: relative;
 }
+
+/*This version of the search styling vertically centers where 
+as the uncommentted one matches the web archive version more closely
+They both work as intented*/
+
+/* .search {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+} */
+
 .searchbar {
   background: #fff;
   display: flex;
