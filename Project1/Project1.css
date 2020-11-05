@@ -5,6 +5,8 @@ body {
   margin: 0 auto;
   margin-top: 89px;
   padding-bottom: 27px;
+  display: block;
+  text-align: center;
 }
 .search {
   height: 233px;
@@ -20,10 +22,9 @@ body {
   box-shadow: none;
   border-radius: 24px;
   z-index: 3;
-  height: 46px;
+  height: 42px;
   margin: 0 auto;
-  width: 584px;
-  padding-top: 6px;
+  width: 578px;
 }
 .searchbar:hover {
   box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
@@ -37,6 +38,8 @@ body {
 .submitButtons {
   padding-top: 18px;
   width: 571px;
+  margin: 0 auto;
+  text-align: center;
 }
 .searchButton {
   background-image: -webkit-linear-gradient(top, #f5f5f5, #f1f1f1);
